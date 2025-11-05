@@ -17,7 +17,7 @@ dotenv.config();
 
 const app = express();
 // Render inyecta automáticamente la variable PORT, usar 3000 como fallback solo en desarrollo
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT || '3000', 10);
 
 // Configurar trust proxy para Render (necesario para rate limiting detrás de proxy)
 app.set('trust proxy', 1);
