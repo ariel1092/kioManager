@@ -46,8 +46,6 @@ export default function ProveedorDetalle() {
         </Link>
       </div>
 
-      {errorMsg && <Alert variant="error">{errorMsg}</Alert>}
-
       {/* Ficha */}
       <div className="grid grid-cols-3 gap-4">
         <div className="p-4 border rounded-md">
