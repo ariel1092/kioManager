@@ -16,6 +16,7 @@ import { apiRateLimiter } from './infrastructure/middleware/rateLimiter';
 dotenv.config();
 
 const app = express();
+// Render inyecta automáticamente la variable PORT, usar 3000 como fallback solo en desarrollo
 const PORT = process.env.PORT || 3000;
 
 // Configurar trust proxy para Render (necesario para rate limiting detrás de proxy)
@@ -85,10 +86,12 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 });
 
 // Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor ejecutándose en http://localhost:${PORT}`);
-  console.log(`📚 API disponible en http://localhost:${PORT}/api`);
-  console.log(`💚 Health check: http://localhost:${PORT}/api/health`);
+// En producción (Render), escuchar en 0.0.0.0 para que sea accesible externamente
+const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
+app.listen(PORT, host, () => {
+  console.log(`🚀 Servidor ejecutándose en http://${host}:${PORT}`);
+  console.log(`📚 API disponible en http://${host}:${PORT}/api`);
+  console.log(`💚 Health check: http://${host}:${PORT}/api/health`);
 });
 
 export default app;
