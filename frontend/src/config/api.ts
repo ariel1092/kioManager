@@ -2,8 +2,13 @@
  * Configuración de la API
  */
 const envApiUrl = import.meta.env.VITE_API_URL;
-// Usar el puerto 3010 como default (donde está corriendo el backend según los logs)
-export const API_BASE_URL = envApiUrl || 'http://localhost:3010/api';
+// Normalizar la URL: asegurar que termine en /api
+let apiUrl = envApiUrl || 'http://localhost:3010/api';
+if (apiUrl && !apiUrl.endsWith('/api')) {
+  // Si la URL no termina en /api, agregarlo
+  apiUrl = apiUrl.endsWith('/') ? `${apiUrl}api` : `${apiUrl}/api`;
+}
+export const API_BASE_URL = apiUrl;
 
 // Validar que la URL esté definida
 if (!API_BASE_URL) {

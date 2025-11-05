@@ -159,6 +159,8 @@ git push -u origin main
    - Key: `DATABASE_URL`
    - Value: La URL de Supabase que copiaste en el Paso 1.4
    - Ejemplo: `postgresql://postgres.xxxxx:TuPassword123@aws-0-sa-east-1.pooler.supabase.com:6543/postgres`
+   - ⚠️ **IMPORTANTE**: Debe usar Connection Pooling (puerto 6543), NO conexión directa (5432)
+   - ⚠️ **IMPORTANTE**: Debe incluir `pooler.supabase.com`, NO `db.supabase.co`
 
    **Variable 2:**
    - Key: `NODE_ENV`
@@ -251,10 +253,14 @@ git push -u origin main
 3. Configurar:
    - **Name:** `sistema-kiosco-frontend`
    - **Branch:** `main`
-   - **Root Directory:** `frontend`
-   - **Build Command:** `npm install && npm run build`
-   - **Publish Directory:** `frontend/dist`
+   - **Root Directory:** `frontend` ⚠️ **IMPORTANTE: Dejar vacío o usar `.`**
+   - **Build Command:** `cd frontend && npm install && npm run build`
+   - **Publish Directory:** `frontend/dist` ⚠️ **IMPORTANTE: Ruta relativa a la raíz del repo**
    - **Instance Type:** ✅ **Free** (gratis)
+   
+   **⚠️ NOTA:** Si usas `Root Directory: frontend`, entonces:
+   - **Build Command:** `npm install && npm run build`
+   - **Publish Directory:** `dist` (sin `frontend/`)
 
 4. Click en **"Advanced"** → **"Environment"**
 
@@ -262,6 +268,7 @@ git push -u origin main
    Click en **"Add Environment Variable"**:
    - Key: `VITE_API_URL`
    - Value: `https://sistema-kiosco-backend.onrender.com/api`
+     ⚠️ **IMPORTANTE**: Debe terminar en `/api`
      ⚠️ **Usar la URL real de tu backend del Paso 3.3**
 
 6. Click en **"Create Static Site"**
@@ -316,30 +323,30 @@ git push -u origin main
    ```
 2. Debería cargar la aplicación
 
-### 7.3 Crear Usuario Inicial
+### 7.3 Crear Usuarios Iniciales
 
-**Opción A: Desde la aplicación (si hay botón de registro)**
-1. Ir al frontend
-2. Click en **"Registrar"** o **"Sign Up"**
-3. Crear usuario:
-   - Nombre: Dueño
-   - Email: dueno@kiosco.com
-   - Password: admin123
-   - Rol: DUENO
+📖 **Guía completa**: Ver archivo [CREAR_USUARIOS_DEPLOYMENT.md](./CREAR_USUARIOS_DEPLOYMENT.md)
 
-**Opción B: Desde la API (PowerShell)**
-```powershell
-# Reemplazar con tu URL real
-$url = "https://sistema-kiosco-backend.onrender.com/api/auth/registrar"
-$body = @{
-    nombre = "Dueño"
-    email = "dueno@kiosco.com"
-    password = "admin123"
-    rol = "DUENO"
-} | ConvertTo-Json
+**Opción Rápida - Scripts Locales (Recomendado):**
 
-Invoke-RestMethod -Uri $url -Method Post -Body $body -ContentType "application/json"
-```
+1. En tu PC, crear archivo `.env` con la `DATABASE_URL` de Supabase:
+   ```env
+   DATABASE_URL=postgresql://postgres.xxxxx:TuPassword123@aws-0-sa-east-1.pooler.supabase.com:6543/postgres
+   ```
+
+2. Ejecutar:
+   ```powershell
+   npm install
+   npm run db:generate
+   npm run create-user-dueno
+   npm run create-user-empleado
+   ```
+
+**Credenciales por defecto:**
+- **Dueño**: `dueno@kiosco.com` / `admin123`
+- **Empleado**: `empleado@kiosco.com` / `empleado123`
+
+⚠️ **IMPORTANTE**: Cambiar contraseñas por defecto después de crear usuarios.
 
 ---
 

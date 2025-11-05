@@ -18,6 +18,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Configurar trust proxy para Render (necesario para rate limiting detrás de proxy)
+app.set('trust proxy', 1);
+
 // Middleware de seguridad
 app.use(helmet()); // Protección contra vulnerabilidades comunes
 

@@ -22,6 +22,16 @@ services:
       - key: ALLOWED_ORIGINS
         sync: false # Se configura manualmente después de desplegar frontend
 
+  # Frontend Static Site
+  - type: web
+    name: sistema-kiosco-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false # Se configura manualmente con la URL del backend
+
 
 
 
