@@ -1,0 +1,75 @@
+version: '3.8'
+
+# Docker Compose para Producción
+# Uso: docker-compose -f docker-compose.prod.yml up -d
+
+services:
+  # Base de datos PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: sistema-kiosco-db-prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cambiar-en-produccion}
+      POSTGRES_DB: ${POSTGRES_DB:-sistema_kiosco}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+      # Backup diario automático
+      - ./backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sistema-kiosco-network
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sistema-kiosco-backend-prod
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-sistema_kiosco}?schema=public
+      NODE_ENV: production
+      PORT: 3000
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm start"
+    networks:
+      - sistema-kiosco-network
+    volumes:
+      - ./logs:/app/logs
+    ports:
+      - "3000:3000"
+
+  # Frontend (Build estático servido con Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:3000/api}
+    container_name: sistema-kiosco-frontend-prod
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - sistema-kiosco-network
+    ports:
+      - "5173:80"  # Nginx sirve el build estático
+
+volumes:
+  postgres_prod_data:
+    driver: local
+
+networks:
+  sistema-kiosco-network:
+    driver: bridge
+

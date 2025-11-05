@@ -1,0 +1,24 @@
+# Render Configuration File
+# Este archivo configura el deployment automático en Render
+
+services:
+  # Backend API
+  - type: web
+    name: sistema-kiosco-backend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: DATABASE_URL
+        sync: false # Se configura manualmente en el dashboard
+      - key: JWT_SECRET
+        sync: false # Se configura manualmente en el dashboard
+      - key: JWT_EXPIRES_IN
+        value: 24h
+      - key: ALLOWED_ORIGINS
+        sync: false # Se configura manualmente después de desplegar frontend
+

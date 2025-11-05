@@ -1,0 +1,238 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// MODELO: USUARIO
+// ============================================
+enum Rol {
+  DUENO
+  EMPLEADO
+}
+
+model Usuario {
+  id        String   @id @default(uuid())
+  nombre    String
+  email     String   @unique
+  password  String // Hash de la contraseña
+  rol       Rol      @default(EMPLEADO)
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  ventas Venta[]
+
+  @@index([email])
+  @@map("usuarios")
+}
+
+// ============================================
+// MODELO: PROVEEDOR
+// ============================================
+model Proveedor {
+  id               String   @id @default(uuid())
+  nombre           String // Nombre o razón social
+  contacto         String? // Nombre del representante
+  telefono         String?
+  email            String?
+  direccion        String?
+  tipo             String? // Tipo de proveedor: bebidas, golosinas, cigarrillos, etc.
+  condicionPago    String? // Condición de pago: contado, 7 días, 15 días, 30 días, etc.
+  cuit             String? // CUIT o datos fiscales para facturación
+  cuentasBancarias String? // CBU o información bancaria para transferencias
+  activo           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relaciones
+  compras   Compra[]
+  productos Producto[]
+  pagos     PagoProveedor[]
+
+  @@index([tipo])
+  @@index([activo])
+  @@map("proveedores")
+}
+
+// ============================================
+// MODELO: PRODUCTO
+// ============================================
+model Producto {
+  id               String   @id @default(uuid())
+  codigo           String   @unique // Código de barras o código interno
+  nombre           String
+  descripcion      String?
+  categoria        String?
+  precioCompra     Decimal  @db.Decimal(10, 2) // Precio de compra al proveedor
+  precioVenta      Decimal  @db.Decimal(10, 2) // Precio de venta al cliente
+  stockMinimo      Int      @default(0) // Stock mínimo para alertas
+  stockActual      Int      @default(0) // Stock actual
+  tieneVencimiento Boolean  @default(false) // Si el producto tiene fecha de vencimiento
+  activo           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relaciones
+  proveedorId String?
+  proveedor   Proveedor?   @relation(fields: [proveedorId], references: [id])
+  lotes       Lote[]
+  ventasItems VentaItem[]
+  compraItems CompraItem[]
+
+  @@index([codigo])
+  @@index([categoria])
+  @@index([proveedorId])
+  @@map("productos")
+}
+
+// ============================================
+// MODELO: LOTE (Para control de vencimientos)
+// ============================================
+model Lote {
+  id               String      @id @default(uuid())
+  numeroLote       String // Número de lote o lote de producción
+  fechaVencimiento DateTime // Fecha de vencimiento del lote
+  cantidad         Int // Cantidad de productos en este lote
+  cantidadVendida  Int         @default(0) // Cantidad vendida de este lote
+  productoId       String
+  producto         Producto    @relation(fields: [productoId], references: [id], onDelete: Cascade)
+  compraId         String? // Relación con la compra que generó este lote
+  compra           Compra?     @relation(fields: [compraId], references: [id])
+  ventasItems      VentaItem[] // Relación con items de ventas
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  @@index([productoId])
+  @@index([fechaVencimiento])
+  @@index([compraId])
+  @@map("lotes")
+}
+
+// ============================================
+// MODELO: COMPRA (Compras a proveedores)
+// ============================================
+model Compra {
+  id               String    @id @default(uuid())
+  numeroFactura    String? // Número de factura del proveedor
+  fechaCompra      DateTime  @default(now())
+  total            Decimal   @db.Decimal(10, 2) // Total de la compra
+  formaPago        String    @default("contado") // contado, credito, transferencia
+  fechaVencimiento DateTime? // Fecha de vencimiento si es a crédito
+  pagado           Boolean   @default(false) // Si la compra está pagada
+  montoPagado      Decimal   @default(0) @db.Decimal(10, 2) // Monto pagado parcial o total
+  proveedorId      String
+  proveedor        Proveedor @relation(fields: [proveedorId], references: [id])
+  notas            String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  // Relaciones
+  items CompraItem[]
+  lotes Lote[]
+  pagos PagoProveedor[] // Pagos realizados a esta compra
+
+  @@index([proveedorId])
+  @@index([fechaCompra])
+  @@index([pagado])
+  @@index([fechaVencimiento])
+  @@map("compras")
+}
+
+// ============================================
+// MODELO: COMPRA ITEM (Items de una compra)
+// ============================================
+model CompraItem {
+  id             String   @id @default(uuid())
+  compraId       String
+  compra         Compra   @relation(fields: [compraId], references: [id], onDelete: Cascade)
+  productoId     String
+  producto       Producto @relation(fields: [productoId], references: [id])
+  cantidad       Int
+  precioUnitario Decimal  @db.Decimal(10, 2) // Precio de compra en este momento
+  subtotal       Decimal  @db.Decimal(10, 2) // cantidad * precioUnitario
+  createdAt      DateTime @default(now())
+
+  @@index([compraId])
+  @@index([productoId])
+  @@map("compra_items")
+}
+
+// ============================================
+// MODELO: VENTA
+// ============================================
+model Venta {
+  id          String   @id @default(uuid())
+  numeroVenta String   @unique // Número de venta único
+  fechaVenta  DateTime @default(now())
+  total       Decimal  @db.Decimal(10, 2) // Total de la venta
+  ganancia    Decimal  @db.Decimal(10, 2) // Ganancia total (venta - compra)
+  metodoPago  String   @default("efectivo") // efectivo, tarjeta, transferencia
+  notas       String?
+  usuarioId   String // Usuario que realizó la venta
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relaciones
+  items VentaItem[]
+
+  @@index([fechaVenta])
+  @@index([numeroVenta])
+  @@index([usuarioId])
+  @@map("ventas")
+}
+
+// ============================================
+// MODELO: VENTA ITEM (Items de una venta)
+// ============================================
+model VentaItem {
+  id                   String   @id @default(uuid())
+  ventaId              String
+  venta                Venta    @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+  productoId           String
+  producto             Producto @relation(fields: [productoId], references: [id])
+  loteId               String? // Lote del cual se vendió (para control de vencimientos)
+  lote                 Lote?    @relation(fields: [loteId], references: [id])
+  cantidad             Int
+  precioUnitario       Decimal  @db.Decimal(10, 2) // Precio de venta en este momento
+  precioCompraUnitario Decimal  @db.Decimal(10, 2) // Precio de compra para calcular ganancia
+  subtotal             Decimal  @db.Decimal(10, 2) // cantidad * precioUnitario
+  ganancia             Decimal  @db.Decimal(10, 2) // Ganancia de este item (venta - compra)
+  createdAt            DateTime @default(now())
+
+  @@index([ventaId])
+  @@index([productoId])
+  @@index([loteId])
+  @@map("venta_items")
+}
+
+// ============================================
+// MODELO: PAGO PROVEEDOR (Pagos a proveedores)
+// ============================================
+model PagoProveedor {
+  id            String    @id @default(uuid())
+  proveedorId   String
+  proveedor     Proveedor @relation(fields: [proveedorId], references: [id])
+  compraId      String? // Compra específica que se está pagando (opcional, puede ser pago general)
+  compra        Compra?   @relation(fields: [compraId], references: [id])
+  fecha         DateTime  @default(now())
+  monto         Decimal   @db.Decimal(10, 2) // Monto pagado
+  metodoPago    String    @default("efectivo") // efectivo, transferencia, cheque, etc.
+  observaciones String? // Observaciones sobre el pago
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([proveedorId])
+  @@index([compraId])
+  @@index([fecha])
+  @@map("pagos_proveedor")
+}
