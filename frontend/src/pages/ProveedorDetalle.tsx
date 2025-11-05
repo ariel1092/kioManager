@@ -1,15 +1,12 @@
 import { useParams, Link } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { apiService } from '../services/api';
 import Button from '../components/ui/Button';
 import Loading from '../components/ui/Loading';
 import Alert from '../components/ui/Alert';
-import { useState } from 'react';
 
 export default function ProveedorDetalle() {
   const { id } = useParams<{ id: string }>();
-  const queryClient = useQueryClient();
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const { data: proveedores } = useQuery({
     queryKey: ['proveedores'],
@@ -60,14 +57,8 @@ export default function ProveedorDetalle() {
           <p><span className="text-gray-600">Email:</span> {proveedor.email || '-'}</p>
         </div>
         <div className="p-4 border rounded-md">
-          <h3 className="font-medium mb-2">Datos comerciales</h3>
-          <p><span className="text-gray-600">Tipo:</span> {proveedor.tipo || '-'}</p>
-          <p><span className="text-gray-600">Condición de pago:</span> {proveedor.condicionPago || '-'}</p>
-          <p><span className="text-gray-600">CUIT:</span> {proveedor.cuit || '-'}</p>
-        </div>
-        <div className="p-4 border rounded-md">
-          <h3 className="font-medium mb-2">Cuentas</h3>
-          <p className="break-words">{proveedor.cuentasBancarias || '-'}</p>
+          <h3 className="font-medium mb-2">Datos adicionales</h3>
+          <p><span className="text-gray-600">Información:</span> No disponible</p>
         </div>
       </div>
 

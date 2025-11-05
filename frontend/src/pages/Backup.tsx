@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query';
 import { apiService } from '../services/api';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
-import Loading from '../components/ui/Loading';
 import Alert from '../components/ui/Alert';
 import { Download, Database, FileText } from 'lucide-react';
 
@@ -13,7 +12,7 @@ export default function Backup() {
 
   const exportarMutation = useMutation({
     mutationFn: apiService.exportarDatos.bind(apiService),
-    onSuccess: (blob) => {
+    onSuccess: (blob: Blob) => {
       // Crear URL del blob y descargar
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');

@@ -39,10 +39,10 @@ export default function Productos() {
     queryFn: () => apiService.listarProductos(true),
   });
 
-  const { data: proveedores } = useQuery({
-    queryKey: ['proveedores'],
-    queryFn: () => apiService.listarProveedores(true),
-  });
+  // const { data: proveedores } = useQuery({
+  //   queryKey: ['proveedores'],
+  //   queryFn: () => apiService.listarProveedores(true),
+  // });
 
   const {
     register,
@@ -238,9 +238,9 @@ export default function Productos() {
 }
 
 function ProductoRow({ producto, isDueño }: { producto: Producto; isDueño: boolean }) {
-  const margenGanancia = producto.precioCompra > 0
-    ? ((producto.precioVenta - producto.precioCompra) / producto.precioCompra) * 100
-    : 0;
+  // const margenGanancia = producto.precioCompra > 0
+  //   ? ((producto.precioVenta - producto.precioCompra) / producto.precioCompra) * 100
+  //   : 0;
 
   const stockBajo = producto.stockActual <= producto.stockMinimo;
 

@@ -85,7 +85,6 @@ export default function Dashboard() {
 
   const totalProductos = productos?.length || 0;
   const totalVentas = reporte?.cantidadVentas || 0;
-  const totalGanancias = reporte?.totalGanancias || 0;
   const gananciaNeta = reporte?.gananciaNeta || 0;
   const alertasStock = stockBajo?.length || 0;
   const lotesVencidosCount = lotesVencidos?.length || 0;

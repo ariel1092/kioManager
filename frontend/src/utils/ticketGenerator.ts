@@ -33,7 +33,6 @@ export function generarHTMLTicket(
   const fecha = format(new Date(venta.fechaVenta), 'dd/MM/yyyy HH:mm', { locale: esLocale });
 
   // Calcular totales
-  const subtotal = venta.items.reduce((sum, item) => sum + item.subtotal, 0);
   const total = venta.total;
 
   const itemsHTML = venta.items

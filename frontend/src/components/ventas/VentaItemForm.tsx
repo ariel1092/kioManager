@@ -3,7 +3,7 @@ import { apiService } from '../../services/api';
 import { format } from 'date-fns';
 import esLocale from 'date-fns/locale/es';
 import { Trash2 } from 'lucide-react';
-import type { Producto, Lote } from '../../types';
+import type { Producto } from '../../types';
 
 interface VentaItem {
   productoId: string;
@@ -12,7 +12,6 @@ interface VentaItem {
 }
 
 interface VentaItemFormProps {
-  item: VentaItem;
   index: number;
   productos: Producto[] | undefined;
   productoId: string;
@@ -24,7 +23,6 @@ interface VentaItemFormProps {
 }
 
 export default function VentaItemForm({
-  item,
   index,
   productos,
   productoId,

@@ -12,6 +12,7 @@ import Select from '../components/ui/Select';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import type { Usuario } from '../types';
 
 const crearUsuarioSchema = z.object({
   nombre: z.string().min(1, 'El nombre es obligatorio'),

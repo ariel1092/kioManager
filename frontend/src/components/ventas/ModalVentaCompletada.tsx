@@ -1,7 +1,7 @@
 import Modal from '../ui/Modal';
 import { format } from 'date-fns';
 import esLocale from 'date-fns/locale/es';
-import { CheckCircle, Package, DollarSign, Printer } from 'lucide-react';
+import { CheckCircle, Package, Printer } from 'lucide-react';
 import { imprimirTicket } from '../../utils/ticketGenerator';
 import TicketPreview from './TicketPreview';
 import { useState } from 'react';

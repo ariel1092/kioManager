@@ -11,6 +11,8 @@ import type {
   CrearVentaDTO,
   ApiResponse,
   ApiError,
+  Usuario,
+  LoginResponse,
 } from '../types';
 
   /**

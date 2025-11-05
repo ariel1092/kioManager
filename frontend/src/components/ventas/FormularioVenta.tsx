@@ -7,9 +7,7 @@ import Input from '../ui/Input';
 import Loading from '../ui/Loading';
 import Alert from '../ui/Alert';
 import { Plus, Trash2, Scan } from 'lucide-react';
-import { format } from 'date-fns';
-import esLocale from 'date-fns/locale/es';
-import type { CrearVentaDTO, Lote } from '../../types';
+import type { CrearVentaDTO } from '../../types';
 import VentaItemForm from './VentaItemForm';
 
 interface FormularioVentaProps {
@@ -45,7 +43,6 @@ export default function FormularioVenta({
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<{ metodoPago: string; notas?: string }>({
     defaultValues: {
       metodoPago: 'efectivo',
@@ -134,7 +131,6 @@ export default function FormularioVenta({
         codigoBarrasInputRef.current?.focus();
       }, 100);
     } catch (error: any) {
-      const mensajeError = error.response?.data?.error || 'Producto no encontrado';
       setErrorCodigo(`Código "${codigo.trim()}" no encontrado. Verifique que el código sea correcto.`);
       setCodigoBarras('');
       setTimeout(() => {
@@ -229,7 +225,6 @@ export default function FormularioVenta({
         {items.map((item, index) => (
           <VentaItemForm
             key={index}
-            item={item}
             index={index}
             productos={productos}
             productoId={item.productoId}

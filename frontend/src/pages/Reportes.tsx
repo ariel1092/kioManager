@@ -6,7 +6,7 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Loading from '../components/ui/Loading';
 import Alert from '../components/ui/Alert';
-import { BarChart3, DollarSign, TrendingUp, ArrowDownCircle } from 'lucide-react';
+import { BarChart3, DollarSign, TrendingUp } from 'lucide-react';
 import { format, subDays } from 'date-fns';
 import esLocale from 'date-fns/locale/es';
 
