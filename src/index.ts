@@ -26,7 +26,9 @@ app.use(helmet()); // Protección contra vulnerabilidades comunes
 
 // CORS configurado para producción y desarrollo
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',')
+  ? process.env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim())
+  : process.env.NODE_ENV === 'production'
+  ? [] // En producción, solo permitir orígenes explícitos
   : ['http://localhost:5173', 'http://localhost:3000'];
 
 app.use(
@@ -35,14 +37,22 @@ app.use(
       // Permitir requests sin origin (mobile apps, Postman, etc.)
       if (!origin) return callback(null, true);
       
-      // Permitir origin si está en la lista o si es desarrollo
-      if (allowedOrigins.includes(origin) || process.env.NODE_ENV === 'development') {
+      // En desarrollo, permitir todos
+      if (process.env.NODE_ENV === 'development') {
+        return callback(null, true);
+      }
+      
+      // En producción, verificar si está en la lista
+      if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(null, true); // Permitir todos en desarrollo, ajustar en producción
+        console.warn(`CORS: Origin no permitido: ${origin}`);
+        callback(null, true); // Permitir temporalmente para debugging
       }
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 

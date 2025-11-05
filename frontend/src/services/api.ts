@@ -49,6 +49,20 @@ class ApiService {
         },
       });
 
+      // Interceptor para agregar token en cada petición
+      this.client.interceptors.request.use(
+        (config) => {
+          const token = localStorage.getItem('token');
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+          }
+          return config;
+        },
+        (error) => {
+          return Promise.reject(error);
+        }
+      );
+
       // Interceptor para manejo de errores
       this.client.interceptors.response.use(
         (response) => response,
@@ -61,7 +75,7 @@ class ApiService {
         }
       );
 
-      // Aplicar token si existe
+      // Aplicar token inicial si existe
       const token = localStorage.getItem('token');
       if (token) {
         this.client.defaults.headers.common['Authorization'] = `Bearer ${token}`;
