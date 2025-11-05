@@ -24,6 +24,8 @@ export class VentaRepository implements IVentaRepository {
     if (!data) return null;
     return Venta.fromPersistence({
       ...data,
+      total: Number(data.total),
+      ganancia: Number(data.ganancia),
       items: data.items.map(item => ({
         ...item,
         precioUnitario: Number(item.precioUnitario),
@@ -50,6 +52,8 @@ export class VentaRepository implements IVentaRepository {
     if (!data) return null;
     return Venta.fromPersistence({
       ...data,
+      total: Number(data.total),
+      ganancia: Number(data.ganancia),
       items: data.items.map(item => ({
         ...item,
         precioUnitario: Number(item.precioUnitario),
@@ -75,6 +79,8 @@ export class VentaRepository implements IVentaRepository {
 
     return data.map(item => Venta.fromPersistence({
       ...item,
+      total: Number(item.total),
+      ganancia: Number(item.ganancia),
       items: item.items.map(vi => ({
         ...vi,
         precioUnitario: Number(vi.precioUnitario),
@@ -130,6 +136,8 @@ export class VentaRepository implements IVentaRepository {
     return data.map(item => {
       const venta = Venta.fromPersistence({
         ...item,
+        total: Number(item.total),
+        ganancia: Number(item.ganancia),
         items: item.items.map(vi => ({
           ...vi,
           precioUnitario: Number(vi.precioUnitario),

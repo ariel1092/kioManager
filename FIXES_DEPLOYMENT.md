@@ -79,3 +79,4 @@ Los siguientes problemas pueden seguir apareciendo pero **NO deberían impedir l
 - **Después de compilar, se eliminan** para mantener la imagen ligera
 
 
+

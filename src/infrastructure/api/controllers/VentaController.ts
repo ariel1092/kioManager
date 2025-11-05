@@ -33,8 +33,14 @@ export class VentaController {
 
       const body = this.registrarVentaSchema.parse(req.body);
 
+      // Convertir null a undefined para compatibilidad con use cases
       const result = await this.registrarVenta.execute({
         ...body,
+        items: body.items.map(item => ({
+          ...item,
+          loteId: item.loteId ?? undefined,
+        })),
+        notas: body.notas ?? undefined,
         usuarioId: req.user.userId,
       });
 

@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import type { StringValue } from 'ms';
 import { Rol } from '../../domain/entities/Usuario';
 
 /**
@@ -42,9 +43,10 @@ export class JwtService {
    * Genera un token JWT para un usuario
    */
   generateToken(payload: PayloadToken): string {
-    return jwt.sign(payload, this.secret, {
-      expiresIn: this.expiresIn as string,
-    });
+    const options: jwt.SignOptions = {
+      expiresIn: this.expiresIn as StringValue | number,
+    };
+    return jwt.sign(payload, this.secret, options);
   }
 
   /**

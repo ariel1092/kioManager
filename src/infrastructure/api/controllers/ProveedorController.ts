@@ -24,7 +24,14 @@ export class ProveedorController {
     try {
       const body = this.crearProveedorSchema.parse(req.body);
 
-      const result = await this.crearProveedor.execute(body);
+      // Convertir null a undefined para compatibilidad con use cases
+      const result = await this.crearProveedor.execute({
+        ...body,
+        contacto: body.contacto ?? undefined,
+        telefono: body.telefono ?? undefined,
+        email: body.email ?? undefined,
+        direccion: body.direccion ?? undefined,
+      });
 
       if (!result.success) {
         res.status(400).json({ error: result.error.message });
@@ -75,6 +82,7 @@ export class ProveedorController {
     }
   }
 }
+
 
 
 

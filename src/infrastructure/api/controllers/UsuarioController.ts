@@ -17,7 +17,7 @@ export class UsuarioController {
     private readonly obtenerUsuario: ObtenerUsuario,
     private readonly actualizarUsuario: ActualizarUsuario,
     private readonly eliminarUsuario: EliminarUsuario,
-    private readonly cambiarContrasena: CambiarContrasena,
+    private readonly cambiarContrasenaUseCase: CambiarContrasena,
     private readonly registrarUsuario: RegistrarUsuario
   ) {}
 
@@ -218,7 +218,7 @@ export class UsuarioController {
         return;
       }
 
-      const result = await this.cambiarContrasena.execute({
+      const result = await this.cambiarContrasenaUseCase.execute({
         usuarioId: id,
         nuevaPassword: body.nuevaPassword,
         passwordActual: body.passwordActual,
@@ -250,6 +250,7 @@ export class UsuarioController {
     }
   }
 }
+
 
 
 

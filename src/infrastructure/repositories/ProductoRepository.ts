@@ -91,7 +91,11 @@ export class ProductoRepository implements IProductoRepository {
       producto => producto.stockActual <= producto.stockMinimo
     );
 
-    return productosStockBajo.map(item => Producto.fromPersistence(item));
+    return productosStockBajo.map(item => Producto.fromPersistence({
+      ...item,
+      precioCompra: Number(item.precioCompra),
+      precioVenta: Number(item.precioVenta),
+    }));
   }
 
   async save(producto: Producto): Promise<Producto> {

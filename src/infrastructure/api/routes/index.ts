@@ -80,7 +80,7 @@ const obtenerLotesPorVencer = new ObtenerLotesPorVencer(loteRepository);
 const obtenerLotesPorProducto = new ObtenerLotesPorProducto(loteRepository);
 const obtenerGanancias = new ObtenerGanancias(ventaRepository, pagoProveedorRepository);
 const obtenerVentasPorFecha = new ObtenerVentasPorFecha(ventaRepository);
-const obtenerProductosMasVendidos = new ObtenerProductosMasVendidos(ventaRepository);
+const obtenerProductosMasVendidos = new ObtenerProductosMasVendidos();
 const registrarCompra = new RegistrarCompra(compraRepository, productoRepository, loteRepository);
 const listarCompras = new ListarCompras(compraRepository);
 const registrarPago = new RegistrarPago(pagoProveedorRepository, compraRepository);
@@ -346,7 +346,7 @@ router.delete('/usuarios/:id', authenticate, authorize(Rol.DUENO), (req, res) =>
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 }));
-router.put('/usuarios/:id/contrasena', authenticate, strictRateLimiter, (req, res) => usuarioController.cambiarContrasena(req, res).catch((err) => {
+router.put('/usuarios/:id/contrasena', authenticate, strictRateLimiter, (req, res) => usuarioController.cambiarContrasena(req, res).catch((err: Error) => {
   console.error('Error en cambiar contraseña:', err);
   if (!res.headersSent) {
     res.status(500).json({ error: 'Error interno del servidor' });

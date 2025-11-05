@@ -34,7 +34,13 @@ export class ProductoController {
     try {
       const body = this.crearProductoSchema.parse(req.body);
 
-      const result = await this.crearProducto.execute(body);
+      // Convertir null a undefined para compatibilidad con use cases
+      const result = await this.crearProducto.execute({
+        ...body,
+        descripcion: body.descripcion ?? undefined,
+        categoria: body.categoria ?? undefined,
+        proveedorId: body.proveedorId ?? undefined,
+      });
 
       if (!result.success) {
         res.status(400).json({ error: result.error.message });
