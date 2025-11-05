@@ -15,17 +15,21 @@ import esLocale from 'date-fns/locale/es';
 export default function Dashboard() {
   const { ventaCompletada, mostrarModal, cerrarModal } = useVenta();
   const { isAuthenticated } = useAuth();
+  
+  // Verificar también localStorage para evitar race conditions
+  const token = localStorage.getItem('token');
+  const isReady = isAuthenticated || !!token;
 
   const { data: productos, isLoading: productosLoading } = useQuery({
     queryKey: ['productos'],
     queryFn: () => apiService.listarProductos(true),
-    enabled: isAuthenticated,
+    enabled: isReady,
   });
 
   const { data: stockBajo, isLoading: stockBajoLoading } = useQuery({
     queryKey: ['productos-stock-bajo'],
     queryFn: () => apiService.obtenerProductosStockBajo(),
-    enabled: isAuthenticated,
+    enabled: isReady,
   });
 
   // Ganancias netas del mes en curso - Memorizar fechas para evitar loops
@@ -44,13 +48,13 @@ export default function Dashboard() {
     queryKey: ['reporte-ganancias', fechas.inicioISO, fechas.finISO],
     queryFn: () => apiService.obtenerGanancias(fechas.inicio, fechas.fin),
     staleTime: 60000, // Cache por 1 minuto para evitar requests excesivos
-    enabled: isAuthenticated,
+    enabled: isReady,
   });
 
   const { data: lotesVencidos, isLoading: lotesVencidosLoading } = useQuery({
     queryKey: ['lotes-vencidos'],
     queryFn: () => apiService.obtenerLotesVencidos(),
-    enabled: isAuthenticated,
+    enabled: isReady,
   });
 
   // Datos para gráficos - últimos 30 días
@@ -69,14 +73,14 @@ export default function Dashboard() {
     queryKey: ['ventas-por-fecha', fechasGraficos.inicioISO, fechasGraficos.finISO],
     queryFn: () => apiService.obtenerVentasPorFecha(fechasGraficos.inicio, fechasGraficos.fin),
     staleTime: 60000, // Cache por 1 minuto
-    enabled: isAuthenticated,
+    enabled: isReady,
   });
 
   const { data: productosMasVendidos, isLoading: productosMasVendidosLoading } = useQuery({
     queryKey: ['productos-mas-vendidos', fechasGraficos.inicioISO, fechasGraficos.finISO],
     queryFn: () => apiService.obtenerProductosMasVendidos(fechasGraficos.inicio, fechasGraficos.fin, 10),
     staleTime: 60000, // Cache por 1 minuto
-    enabled: isAuthenticated,
+    enabled: isReady,
   });
 
   const isLoading =

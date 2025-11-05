@@ -42,7 +42,12 @@ export default function Login() {
         throw new Error('Error: El token no se guardó correctamente');
       }
       console.log('[Login] Token guardado correctamente');
-      navigate('/');
+      
+      // Esperar un momento para que el contexto se actualice
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Navegar al dashboard
+      navigate('/', { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
       console.error('[Login] Error:', err);

@@ -33,15 +33,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const response = await apiService.login(email, password);
-    setUser(response.usuario);
-    setToken(response.token);
     
-    // Guardar en localStorage
+    // Guardar en localStorage primero
     localStorage.setItem('token', response.token);
     localStorage.setItem('user', JSON.stringify(response.usuario));
     
     // Actualizar el token en el servicio API
     apiService.setToken(response.token);
+    
+    // Actualizar el estado después de guardar en localStorage
+    setUser(response.usuario);
+    setToken(response.token);
   };
 
   const logout = () => {
