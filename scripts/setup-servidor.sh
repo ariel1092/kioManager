@@ -62,3 +62,4 @@ echo "  4. Configurar Nginx como reverse proxy"
 echo "  5. Obtener certificado SSL: certbot --nginx -d tu-dominio.com"
 
 
+

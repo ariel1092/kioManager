@@ -26,10 +26,10 @@ export class VentaRepository implements IVentaRepository {
       ...data,
       items: data.items.map(item => ({
         ...item,
-        precioUnitario: item.precioUnitario,
-        precioCompraUnitario: item.precioCompraUnitario,
-        subtotal: item.subtotal,
-        ganancia: item.ganancia,
+        precioUnitario: Number(item.precioUnitario),
+        precioCompraUnitario: Number(item.precioCompraUnitario),
+        subtotal: Number(item.subtotal),
+        ganancia: Number(item.ganancia),
       })),
     });
   }
@@ -52,10 +52,10 @@ export class VentaRepository implements IVentaRepository {
       ...data,
       items: data.items.map(item => ({
         ...item,
-        precioUnitario: item.precioUnitario,
-        precioCompraUnitario: item.precioCompraUnitario,
-        subtotal: item.subtotal,
-        ganancia: item.ganancia,
+        precioUnitario: Number(item.precioUnitario),
+        precioCompraUnitario: Number(item.precioCompraUnitario),
+        subtotal: Number(item.subtotal),
+        ganancia: Number(item.ganancia),
       })),
     });
   }
@@ -77,10 +77,10 @@ export class VentaRepository implements IVentaRepository {
       ...item,
       items: item.items.map(vi => ({
         ...vi,
-        precioUnitario: vi.precioUnitario,
-        precioCompraUnitario: vi.precioCompraUnitario,
-        subtotal: vi.subtotal,
-        ganancia: vi.ganancia,
+        precioUnitario: Number(vi.precioUnitario),
+        precioCompraUnitario: Number(vi.precioCompraUnitario),
+        subtotal: Number(vi.subtotal),
+        ganancia: Number(vi.ganancia),
       })),
     }));
   }
@@ -132,10 +132,10 @@ export class VentaRepository implements IVentaRepository {
         ...item,
         items: item.items.map(vi => ({
           ...vi,
-          precioUnitario: vi.precioUnitario,
-          precioCompraUnitario: vi.precioCompraUnitario,
-          subtotal: vi.subtotal,
-          ganancia: vi.ganancia,
+          precioUnitario: Number(vi.precioUnitario),
+          precioCompraUnitario: Number(vi.precioCompraUnitario),
+          subtotal: Number(vi.subtotal),
+          ganancia: Number(vi.ganancia),
         })),
       });
       

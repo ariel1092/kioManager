@@ -188,3 +188,4 @@ Para cualquier impresora térmica:
 **¿Necesitas ayuda?** Consulta la documentación o contacta al soporte técnico.
 
 
+

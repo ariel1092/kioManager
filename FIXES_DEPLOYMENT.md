@@ -78,3 +78,4 @@ Los siguientes problemas pueden seguir apareciendo pero **NO deberían impedir l
 - **Las dependencias de desarrollo se instalan temporalmente** solo para compilar TypeScript
 - **Después de compilar, se eliminan** para mantener la imagen ligera
 
+

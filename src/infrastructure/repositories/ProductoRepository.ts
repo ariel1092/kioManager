@@ -16,7 +16,11 @@ export class ProductoRepository implements IProductoRepository {
     });
 
     if (!data) return null;
-    return Producto.fromPersistence(data);
+    return Producto.fromPersistence({
+      ...data,
+      precioCompra: Number(data.precioCompra),
+      precioVenta: Number(data.precioVenta),
+    });
   }
 
   async findByCodigo(codigo: string): Promise<Producto | null> {
@@ -25,7 +29,11 @@ export class ProductoRepository implements IProductoRepository {
     });
 
     if (!data) return null;
-    return Producto.fromPersistence(data);
+    return Producto.fromPersistence({
+      ...data,
+      precioCompra: Number(data.precioCompra),
+      precioVenta: Number(data.precioVenta),
+    });
   }
 
   async findAll(activos?: boolean): Promise<Producto[]> {
@@ -35,7 +43,11 @@ export class ProductoRepository implements IProductoRepository {
       orderBy: { nombre: 'asc' },
     });
 
-    return data.map(item => Producto.fromPersistence(item));
+    return data.map(item => Producto.fromPersistence({
+      ...item,
+      precioCompra: Number(item.precioCompra),
+      precioVenta: Number(item.precioVenta),
+    }));
   }
 
   async findByCategoria(categoria: string): Promise<Producto[]> {
@@ -44,7 +56,11 @@ export class ProductoRepository implements IProductoRepository {
       orderBy: { nombre: 'asc' },
     });
 
-    return data.map(item => Producto.fromPersistence(item));
+    return data.map(item => Producto.fromPersistence({
+      ...item,
+      precioCompra: Number(item.precioCompra),
+      precioVenta: Number(item.precioVenta),
+    }));
   }
 
   async findByProveedor(proveedorId: string): Promise<Producto[]> {
@@ -53,7 +69,11 @@ export class ProductoRepository implements IProductoRepository {
       orderBy: { nombre: 'asc' },
     });
 
-    return data.map(item => Producto.fromPersistence(item));
+    return data.map(item => Producto.fromPersistence({
+      ...item,
+      precioCompra: Number(item.precioCompra),
+      precioVenta: Number(item.precioVenta),
+    }));
   }
 
   async findStockBajo(): Promise<Producto[]> {
@@ -108,7 +128,11 @@ export class ProductoRepository implements IProductoRepository {
       },
     });
 
-    return Producto.fromPersistence(data);
+    return Producto.fromPersistence({
+      ...data,
+      precioCompra: Number(data.precioCompra),
+      precioVenta: Number(data.precioVenta),
+    });
   }
 
   async delete(id: string): Promise<void> {

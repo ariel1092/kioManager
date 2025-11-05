@@ -18,7 +18,10 @@ export class PagoProveedorRepository implements IPagoProveedorRepository {
     });
 
     if (!data) return null;
-    return PagoProveedor.fromPersistence(data);
+    return PagoProveedor.fromPersistence({
+      ...data,
+      monto: Number(data.monto),
+    });
   }
 
   async findByProveedor(proveedorId: string): Promise<PagoProveedor[]> {
@@ -30,7 +33,10 @@ export class PagoProveedorRepository implements IPagoProveedorRepository {
       },
     });
 
-    return data.map(item => PagoProveedor.fromPersistence(item));
+    return data.map(item => PagoProveedor.fromPersistence({
+      ...item,
+      monto: Number(item.monto),
+    }));
   }
 
   async findByCompra(compraId: string): Promise<PagoProveedor[]> {
@@ -42,7 +48,10 @@ export class PagoProveedorRepository implements IPagoProveedorRepository {
       },
     });
 
-    return data.map(item => PagoProveedor.fromPersistence(item));
+    return data.map(item => PagoProveedor.fromPersistence({
+      ...item,
+      monto: Number(item.monto),
+    }));
   }
 
   async findByFecha(fechaInicio: Date, fechaFin: Date): Promise<PagoProveedor[]> {
@@ -63,7 +72,10 @@ export class PagoProveedorRepository implements IPagoProveedorRepository {
       orderBy: { fecha: 'desc' },
     });
 
-    return data.map(item => PagoProveedor.fromPersistence(item));
+    return data.map(item => PagoProveedor.fromPersistence({
+      ...item,
+      monto: Number(item.monto),
+    }));
   }
 
   async save(pago: PagoProveedor): Promise<PagoProveedor> {
@@ -89,7 +101,10 @@ export class PagoProveedorRepository implements IPagoProveedorRepository {
       },
     });
 
-    return PagoProveedor.fromPersistence(data);
+    return PagoProveedor.fromPersistence({
+      ...data,
+      monto: Number(data.monto),
+    });
   }
 
   async delete(id: string): Promise<void> {

@@ -231,3 +231,4 @@ Todos los errores siguen este formato:
 - `500` - Error interno del servidor
 
 
+

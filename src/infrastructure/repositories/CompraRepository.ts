@@ -22,7 +22,11 @@ export class CompraRepository implements ICompraRepository {
     });
 
     if (!data) return null;
-    return Compra.fromPersistence(data);
+    return Compra.fromPersistence({
+      ...data,
+      total: Number(data.total),
+      montoPagado: Number(data.montoPagado),
+    });
   }
 
   async findByProveedor(proveedorId: string): Promise<Compra[]> {
@@ -38,7 +42,11 @@ export class CompraRepository implements ICompraRepository {
       },
     });
 
-    return data.map(item => Compra.fromPersistence(item));
+    return data.map(item => Compra.fromPersistence({
+      ...item,
+      total: Number(item.total),
+      montoPagado: Number(item.montoPagado),
+    }));
   }
 
   async findPendientes(): Promise<Compra[]> {
@@ -57,7 +65,11 @@ export class CompraRepository implements ICompraRepository {
       },
     });
 
-    return data.map(item => Compra.fromPersistence(item));
+    return data.map(item => Compra.fromPersistence({
+      ...item,
+      total: Number(item.total),
+      montoPagado: Number(item.montoPagado),
+    }));
   }
 
   async findVencidas(): Promise<Compra[]> {
@@ -80,7 +92,11 @@ export class CompraRepository implements ICompraRepository {
       },
     });
 
-    return data.map(item => Compra.fromPersistence(item));
+    return data.map(item => Compra.fromPersistence({
+      ...item,
+      total: Number(item.total),
+      montoPagado: Number(item.montoPagado),
+    }));
   }
 
   async save(compra: Compra): Promise<Compra> {
@@ -113,7 +129,11 @@ export class CompraRepository implements ICompraRepository {
       },
     });
 
-    return Compra.fromPersistence(data);
+    return Compra.fromPersistence({
+      ...data,
+      total: Number(data.total),
+      montoPagado: Number(data.montoPagado),
+    });
   }
 
   async delete(id: string): Promise<void> {
@@ -122,5 +142,6 @@ export class CompraRepository implements ICompraRepository {
     });
   }
 }
+
 
 
