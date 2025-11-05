@@ -36,9 +36,16 @@ export default function Login() {
       setError(null);
       setIsLoading(true);
       await login(data.email, data.password);
+      // Verificar que el token se guardó correctamente
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Error: El token no se guardó correctamente');
+      }
+      console.log('[Login] Token guardado correctamente');
       navigate('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
+      console.error('[Login] Error:', err);
     } finally {
       setIsLoading(false);
     }

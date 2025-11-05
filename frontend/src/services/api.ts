@@ -55,6 +55,8 @@ class ApiService {
           const token = localStorage.getItem('token');
           if (token) {
             config.headers.Authorization = `Bearer ${token}`;
+          } else {
+            console.warn('[ApiService] No hay token en localStorage. La petición puede fallar con 401.');
           }
           return config;
         },
@@ -68,6 +70,15 @@ class ApiService {
         (response) => response,
         (error: AxiosError<ApiError>) => {
           if (error.response) {
+            // Si es 401 (Unauthorized), limpiar token y redirigir al login
+            if (error.response.status === 401) {
+              localStorage.removeItem('token');
+              localStorage.removeItem('user');
+              // Redirigir al login solo si no estamos ya en la página de login
+              if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+              }
+            }
             const apiError = error.response.data;
             throw new Error(apiError.error || 'Error desconocido');
           }

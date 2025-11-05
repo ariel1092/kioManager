@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { apiService } from '../services/api';
 import { useVenta } from '../contexts/VentaContext';
+import { useAuth } from '../contexts/AuthContext';
 import Card from '../components/ui/Card';
 import Loading from '../components/ui/Loading';
 import ModalVentaCompletada from '../components/ventas/ModalVentaCompletada';
@@ -13,15 +14,18 @@ import esLocale from 'date-fns/locale/es';
 
 export default function Dashboard() {
   const { ventaCompletada, mostrarModal, cerrarModal } = useVenta();
+  const { isAuthenticated } = useAuth();
 
   const { data: productos, isLoading: productosLoading } = useQuery({
     queryKey: ['productos'],
     queryFn: () => apiService.listarProductos(true),
+    enabled: isAuthenticated,
   });
 
   const { data: stockBajo, isLoading: stockBajoLoading } = useQuery({
     queryKey: ['productos-stock-bajo'],
     queryFn: () => apiService.obtenerProductosStockBajo(),
+    enabled: isAuthenticated,
   });
 
   // Ganancias netas del mes en curso - Memorizar fechas para evitar loops
@@ -40,11 +44,13 @@ export default function Dashboard() {
     queryKey: ['reporte-ganancias', fechas.inicioISO, fechas.finISO],
     queryFn: () => apiService.obtenerGanancias(fechas.inicio, fechas.fin),
     staleTime: 60000, // Cache por 1 minuto para evitar requests excesivos
+    enabled: isAuthenticated,
   });
 
   const { data: lotesVencidos, isLoading: lotesVencidosLoading } = useQuery({
     queryKey: ['lotes-vencidos'],
     queryFn: () => apiService.obtenerLotesVencidos(),
+    enabled: isAuthenticated,
   });
 
   // Datos para gráficos - últimos 30 días
@@ -63,12 +69,14 @@ export default function Dashboard() {
     queryKey: ['ventas-por-fecha', fechasGraficos.inicioISO, fechasGraficos.finISO],
     queryFn: () => apiService.obtenerVentasPorFecha(fechasGraficos.inicio, fechasGraficos.fin),
     staleTime: 60000, // Cache por 1 minuto
+    enabled: isAuthenticated,
   });
 
   const { data: productosMasVendidos, isLoading: productosMasVendidosLoading } = useQuery({
     queryKey: ['productos-mas-vendidos', fechasGraficos.inicioISO, fechasGraficos.finISO],
     queryFn: () => apiService.obtenerProductosMasVendidos(fechasGraficos.inicio, fechasGraficos.fin, 10),
     staleTime: 60000, // Cache por 1 minuto
+    enabled: isAuthenticated,
   });
 
   const isLoading =
