@@ -18,8 +18,6 @@ export interface ProductoMasVendido {
 export class ObtenerProductosMasVendidos {
   private prisma = getPrismaClient();
 
-  constructor(private readonly ventaRepository: IVentaRepository) {}
-
   async execute(
     fechaInicio: Date,
     fechaFin: Date,

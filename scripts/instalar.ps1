@@ -192,3 +192,4 @@ Write-Host "  - QUICKSTART.md: Guía rápida" -ForegroundColor White
 Write-Host "  - GUIA_INSTALACION.md: Guía detallada" -ForegroundColor White
 Write-Host ""
 
+

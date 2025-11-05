@@ -230,3 +230,4 @@ Todos los errores siguen este formato:
 - `404` - No encontrado
 - `500` - Error interno del servidor
 
+

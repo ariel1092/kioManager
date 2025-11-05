@@ -20,7 +20,15 @@ export class PasswordService {
   async verifyPassword(password: string, hash: string): Promise<boolean> {
     return bcrypt.compare(password, hash);
   }
+
+  /**
+   * Alias de verifyPassword para compatibilidad
+   */
+  async comparePassword(password: string, hash: string): Promise<boolean> {
+    return this.verifyPassword(password, hash);
+  }
 }
 
 export const passwordService = new PasswordService();
+
 

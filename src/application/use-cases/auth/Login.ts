@@ -1,4 +1,3 @@
-import { Usuario } from '../../../domain/entities/Usuario';
 import { IUsuarioRepository } from '../../../domain/repositories/IUsuarioRepository';
 import { passwordService } from '../../../shared/auth/PasswordService';
 import { jwtService } from '../../../shared/auth/JwtService';

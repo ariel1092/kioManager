@@ -10,3 +10,4 @@ export interface IProveedorRepository {
   delete(id: string): Promise<void>;
 }
 
+

@@ -191,3 +191,4 @@ import.meta.env.VITE_API_URL
 - [Vite Environment Variables](https://vitejs.dev/guide/env-and-mode.html)
 - [Prisma Connection URLs](https://www.prisma.io/docs/concepts/database-connectors/postgresql)
 
+

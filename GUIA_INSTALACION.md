@@ -188,3 +188,4 @@ Para más información, consulta:
 - `API.md` - Documentación de la API
 - `prisma/schema.prisma` - Esquema de base de datos
 
+

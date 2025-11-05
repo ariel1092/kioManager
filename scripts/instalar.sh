@@ -190,3 +190,4 @@ echo -e "  - QUICKSTART.md: Guía rápida"
 echo -e "  - GUIA_INSTALACION.md: Guía detallada"
 echo ""
 
+

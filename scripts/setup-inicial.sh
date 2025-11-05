@@ -105,3 +105,4 @@ echo "6. Inicia el frontend: cd frontend && npm run dev"
 echo ""
 echo "Para más información, consulta GUIA_PRUEBAS.md"
 
+

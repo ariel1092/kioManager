@@ -155,9 +155,9 @@ export class VentaRepository implements IVentaRepository {
     }
 
     // Usar transacción para garantizar atomicidad
-    const result = await this.prisma.$transaction(async (tx) => {
+    await this.prisma.$transaction(async (tx) => {
       // Crear la venta
-      const ventaData = await tx.venta.create({
+      await tx.venta.create({
         data: {
           id: venta.id,
           numeroVenta: venta.numeroVenta,
@@ -173,7 +173,7 @@ export class VentaRepository implements IVentaRepository {
       });
 
       // Crear los items de la venta
-      const itemsData = await Promise.all(
+      await Promise.all(
         venta.items.map(item =>
           tx.ventaItem.create({
             data: {
@@ -190,11 +190,6 @@ export class VentaRepository implements IVentaRepository {
           })
         )
       );
-
-      return {
-        ...ventaData,
-        items: itemsData,
-      };
     });
 
     // Recuperar la venta completa con relaciones

@@ -181,6 +181,35 @@ export class Producto {
   }
 
   /**
+   * Actualiza el precio de compra
+   */
+  actualizarPrecioCompra(nuevoPrecioCompra: number): Producto {
+    if (nuevoPrecioCompra < 0) {
+      throw new Error('El precio de compra no puede ser negativo');
+    }
+    if (this.precioVenta < nuevoPrecioCompra) {
+      throw new Error('El precio de venta debe ser mayor o igual al precio de compra');
+    }
+    
+    return new Producto(
+      this.id,
+      this.codigo,
+      this.nombre,
+      this.descripcion,
+      this.categoria,
+      nuevoPrecioCompra,
+      this.precioVenta,
+      this.stockMinimo,
+      this.stockActual,
+      this.tieneVencimiento,
+      this.activo,
+      this.proveedorId,
+      this.createdAt,
+      new Date()
+    );
+  }
+
+  /**
    * Desactiva el producto
    */
   desactivar(): Producto {
@@ -202,4 +231,5 @@ export class Producto {
     );
   }
 }
+
 

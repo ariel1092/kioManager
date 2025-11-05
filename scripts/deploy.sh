@@ -51,3 +51,4 @@ echo "  1. Verificar logs: docker-compose -f docker-compose.prod.yml logs -f"
 echo "  2. Probar API: curl http://localhost:3000/api/health"
 echo "  3. Probar Frontend: http://localhost:5173"
 
+

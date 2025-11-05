@@ -7,19 +7,23 @@ WORKDIR /app
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Instalar dependencias
-RUN npm ci --only=production
+# Instalar TODAS las dependencias (incluyendo devDependencies para compilar)
+RUN npm ci
 
 # Copiar código fuente
 COPY . .
 
+# Generar Prisma Client
+RUN npx prisma generate
+
 # Compilar TypeScript
 RUN npm run build
 
-# Generar Prisma Client
-RUN npx prisma generate
+# Limpiar dependencias de desarrollo (opcional, para reducir tamaño de imagen)
+RUN npm prune --production
 
 EXPOSE 3000
 
 CMD ["npm", "start"]
+
 

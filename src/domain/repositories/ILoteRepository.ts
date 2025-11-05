@@ -13,3 +13,4 @@ export interface ILoteRepository {
   delete(id: string): Promise<void>;
 }
 
+

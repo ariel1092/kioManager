@@ -1,5 +1,4 @@
 import { PagoProveedor } from '../../../domain/entities/PagoProveedor';
-import { Compra } from '../../../domain/entities/Compra';
 import { IPagoProveedorRepository } from '../../../domain/repositories/IPagoProveedorRepository';
 import { ICompraRepository } from '../../../domain/repositories/ICompraRepository';
 import { Result } from '../../../shared/types/Result';
@@ -87,4 +86,5 @@ export class RegistrarPago {
     }
   }
 }
+
 

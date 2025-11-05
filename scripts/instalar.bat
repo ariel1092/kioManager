@@ -116,3 +116,4 @@ echo   5. Inicia el frontend (en otra terminal): cd frontend ^&^& npm run dev
 echo.
 pause
 
+

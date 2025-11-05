@@ -93,3 +93,4 @@ echo "📋 Próximo paso:"
 echo "  Obtener certificado SSL:"
 echo "  certbot --nginx -d $DOMAIN -d www.$DOMAIN"
 
+

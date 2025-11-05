@@ -12,3 +12,4 @@ export interface ICompraRepository {
   delete(id: string): Promise<void>;
 }
 
+
